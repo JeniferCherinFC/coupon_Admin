@@ -8,6 +8,8 @@ import 'package:flutter/services.dart';
 import 'package:ivs_admin/constant/colors.dart';
 import 'package:ivs_admin/pages/create_user.dart';
 
+import '../service/login.dart';
+
 class SignIn extends StatefulWidget {
   const SignIn({Key? key}) : super(key: key);
 
@@ -21,6 +23,16 @@ class _SignInState extends State<SignIn> {
   late TextEditingController _passwordController;
   bool _isPasswordHidden = true;
 
+  Login signin = Login();
+
+  login() async {
+    signin.login(
+      mobileNumber: _mobileController.text,
+      password: _passwordController.text,
+      context: context,
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -30,7 +42,7 @@ class _SignInState extends State<SignIn> {
 
   @override
   Widget build(BuildContext context) {
-      final screenWidth = MediaQuery.of(context).size.width;
+    final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       body: Center(
@@ -57,7 +69,7 @@ class _SignInState extends State<SignIn> {
                       height: 15,
                     ),
                     SvgPicture.asset(
-                      'lib/images/IVS signin.svg',
+                      'lib/images/signin.svg',
                       semanticsLabel: 'My SVG Image',
                       height: 229,
                       width: 229,
@@ -165,11 +177,7 @@ class _SignInState extends State<SignIn> {
                         minimumSize: const Size(140, 40),
                       ),
                       onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => const CreateUser(),
-                          ),
-                        );
+                        login();
                       },
                       child: Text(
                         'Login',

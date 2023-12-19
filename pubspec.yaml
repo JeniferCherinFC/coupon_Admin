@@ -52,7 +52,8 @@ dev_dependencies:
   flutter_svg: ^2.0.9
   qr_code_scanner: ^1.0.1
   qr_flutter: ^4.1.0
-
+  dio: ^5.4.0
+  shared_preferences: ^2.2.2
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
