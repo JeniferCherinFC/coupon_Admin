@@ -5,26 +5,32 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../constant/global_variable.dart';
 import '../constant/headers.dart';
 import '../constant/utilities.dart';
+import '../pages/alreadyclaimed.dart';
 import '../pages/create_user.dart';
+import '../pages/successclaim.dart';
 
-class Login{
+class QrValidation{
 
 
-  Future<void> login({
+  Future<void> qrvalid({
 
-    required String ? mobileNumber,
-    required String ? password,
+    required String ? qrId,
+    required String ? branch,
+    required String ? user,
+    required String ? adminId,
     required context,
   }) async {
     // Define the URL of your API endpoint
-    final String apiUrl = '$baseUrl/adlogin';
+    final String apiUrl = '$baseUrl/qrUpdate';
 
 
     // Create a FormData object
 
     FormData formData = FormData.fromMap({
-      'phone_number':mobileNumber,
-      'password':password,
+      'qr_id': qrId,
+      'claimed_branch': branch,
+      'admin_user': user,
+      'admin_id': adminId,
 
     });
 
@@ -48,34 +54,23 @@ class Login{
         print('API response: ${response.data}');
         var message=response.data['response'];
 
-        var message_two=message['data'];
-
-
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        var adminId= message_two['adminid'];
-        var phoneNumber= message_two['phone'];
-        var branch =message_two['branchcode'];
-        var name =message_two['username'];
-
-        await prefs.setString("adminId", "$adminId");
-        await prefs.setString("mobileNumber", "$phoneNumber");
-        await prefs.setString("branchCode", "$branch");
-        await prefs.setString("name", "$name");
-
-        Navigator.of(context).pushReplacement(
+        Navigator.push(
+          context,
           MaterialPageRoute(
-            builder: (context) =>
-            const CreateUser(), // Replace with your actual profile page
+            builder: (context) =>  SuccessClaim(mess:message),
           ),
         );
 
 
-
       }else{
-        showCustomSnackBar(
-          context: context,
-          text:response.data['response'].toString(),
+        var ermessage=response.data['response'];
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>  Notclaimed(mess:ermessage),
+          ),
         );
+
       }
 
     } else {

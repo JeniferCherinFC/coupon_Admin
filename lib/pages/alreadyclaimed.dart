@@ -5,8 +5,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:ivs_admin/pages/scanqrcode.dart';
 
 class Notclaimed extends StatefulWidget {
-  const Notclaimed({super.key});
-
+  final String? mess;
+  const Notclaimed({Key? key, this.mess}) : super(key: key);
   @override
   State<Notclaimed> createState() => _NotclaimedState();
 }
@@ -47,7 +47,7 @@ class _NotclaimedState extends State<Notclaimed> {
                 ),
                 const SizedBox(height: 16.0),
                 Text(
-                  "Your coupon Already claimed...!",
+                  widget.mess ?? "",
                   style: GoogleFonts.montserrat(
                     color: Colors.black,
                     fontSize: 14,

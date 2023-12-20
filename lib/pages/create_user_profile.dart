@@ -8,6 +8,7 @@ import 'package:ivs_admin/pages/create_user.dart';
 import 'package:ivs_admin/pages/password.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../constant/colors.dart';
 import '../service/user_creation.dart';
 
 class CreateUserProfile extends StatefulWidget {
@@ -40,22 +41,31 @@ class _CreateUserProfileState extends State<CreateUserProfile> {
   bool checkbox2 = false;
   bool checkbox3 = false;
 
-late int check1 ;
+  late int check1 ;
   late int check2 ;
   late int check3 ;
 
   int Checkeddata() {
     if (checkbox1 == true) {
-      return  check1 =1;
+      return check1 = 1;
+    } else {
+      return check1 = 0;
     }
-    if (checkbox2 == true){
-      return check2 =1;
-    }
-    if (checkbox3 == true){
-      return  check3 =1;
-    }
-    return 0;
   }
+    int Checkeddata2() {
+      if (checkbox2 == true) {
+        return check2 = 1;
+      } else {
+        return check2 = 0;
+      }
+    }
+      int Checkeddata3() {
+        if (checkbox3 == true) {
+          return check3 = 1;
+        } else {
+          return check3 = 0;
+        }
+      }
 ////////////////////////////////////////////////////////////////////////////////
 
   String selectedCustomerbranch = 'OMR';
@@ -143,8 +153,8 @@ String? cname;
       amountPaid:totalamountcontroller.text,
       createdBy:cname,
       isBreakfast:Checkeddata(),
-      isDinner:Checkeddata(),
-      isLunch:Checkeddata(),
+      isDinner:Checkeddata2(),
+      isLunch:Checkeddata3(),
       context: context,
     );
   }
@@ -153,6 +163,8 @@ String? cname;
 
   void initState() {
     Checkeddata();
+    Checkeddata();
+    Checkeddata3();
     super.initState();
   }
 
@@ -163,6 +175,39 @@ String? cname;
       final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
+
+      appBar: AppBar(
+        backgroundColor: greens,
+
+        // automaticallyImplyLeading: false,
+        // actions: [
+
+          // IconButton(
+          //   onPressed: () {
+          //     Navigator.of(context).push(
+          //       MaterialPageRoute(
+          //         builder: (context) => const CreateUser(),
+          //       ),
+          //     );
+          //   },
+          //   icon: const Icon(Icons.west_outlined,
+          //       color: Colors.black),
+          // ),
+          // const SizedBox(width: 59),
+      title: Text(
+        'Create User Profile ',
+        style: GoogleFonts.montserrat(
+          fontWeight: FontWeight.w600,
+          fontSize: 16,
+          color: Colors.black,
+        ),
+      ),
+
+
+
+
+        // ],
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
@@ -171,44 +216,7 @@ String? cname;
               key: _formKey,
               child: Column(
                 children: [
-                  Row(
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => const CreateUser(),
-                            ),
-                          );
-                        },
-                        icon: const Icon(Icons.west_outlined,
-                            color: Colors.black),
-                      ),
-                      const SizedBox(width: 59),
-                      RichText(
-                        text: TextSpan(
-                          children: <TextSpan>[
-                            TextSpan(
-                              text: 'Create',
-                              style: GoogleFonts.montserrat(
-                                color: Colors.black,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            TextSpan(
-                              text: 'User Profile',
-                              style: GoogleFonts.montserrat(
-                                color: const Color.fromRGBO(43, 135, 97, 0.94),
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+
                   const SizedBox(height: 25),
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 20),

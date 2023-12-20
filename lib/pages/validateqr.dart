@@ -1,5 +1,3 @@
-// ignore_for_file: unused_import, unused_local_variable
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ivs_admin/constant/colors.dart';
@@ -8,10 +6,46 @@ import 'package:ivs_admin/pages/scanqrcode.dart';
 import 'package:ivs_admin/pages/successclaim.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class ValidateQR extends StatelessWidget {
+import '../service/qrvalidation.dart';
+
+class ValidateQR extends StatefulWidget {
   final String? data;
-  const ValidateQR({Key? key, required this.data}) : super(key: key);
+   ValidateQR({Key? key, required this.data}) : super(key: key);
+
+  @override
+  State<ValidateQR> createState() => _ValidateQRState();
+}
+
+class _ValidateQRState extends State<ValidateQR> {
+
+
+  String ? adName;
+  String ? adId;
+  String ? bCode;
+
+
+
+  QrValidation vaildqr = QrValidation();
+
+  qrvalidation() async {
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    adName = prefs.getString("name");
+    adId = prefs.getString("adminId");
+    bCode = prefs.getString("branchCode");
+
+    vaildqr.qrvalid(
+      qrId: widget.data,
+      branch: bCode,
+      user: adName,
+      adminId: adId,
+      context: context,
+    );
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +113,7 @@ class ValidateQR extends StatelessWidget {
                   ),
                   Center(
                     child: Text(
-                      data!,
+                      widget.data!,
                       style: GoogleFonts.commissioner(
                         fontWeight: FontWeight.w600,
                         fontSize: 10,
@@ -98,21 +132,23 @@ class ValidateQR extends StatelessWidget {
                       minimumSize: const Size(131, 36),
                     ),
                     onPressed: () {
-                      if (data != null) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const SuccessClaim(),
-                          ),
-                        );
-                      } else if (data == null) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const Notclaimed(),
-                          ),
-                        );
-                      }
+                      qrvalidation();
+
+                      // if (data != null) {
+                      //   // Navigator.push(
+                      //   //   context,
+                      //   //   MaterialPageRoute(
+                      //   //     builder: (context) => const SuccessClaim(),
+                      //   //   ),
+                      //   // );
+                      // } else if (data == null) {
+                      //   // Navigator.push(
+                      //   //   context,
+                      //   //   MaterialPageRoute(
+                      //   //     builder: (context) => const Notclaimed(),
+                      //   //   ),
+                      //   // );
+                      // }
                     },
                     child: Text(
                       'Validate',

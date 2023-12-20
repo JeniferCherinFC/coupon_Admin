@@ -5,8 +5,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:ivs_admin/pages/create_user.dart';
 
 class SuccessClaim extends StatefulWidget {
-  const SuccessClaim({super.key});
-
+  final String? mess;
+  const SuccessClaim({Key? key, this.mess}) : super(key: key);
   @override
   State<SuccessClaim> createState() => _SuccessClaimState();
 }
@@ -46,7 +46,7 @@ class _SuccessClaimState extends State<SuccessClaim> {
                 ),
                 const SizedBox(height: 16.0),
                 Text(
-                  "Your coupon Successfully claimed...!",
+                  widget.mess ?? "",
                   style: GoogleFonts.montserrat(
                     color: Colors.black,
                     fontSize: 14,

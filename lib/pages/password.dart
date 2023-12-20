@@ -17,6 +17,10 @@ class _PasswordState extends State<Password> {
   @override
   Widget build(BuildContext context) {
       final screenWidth = MediaQuery.of(context).size.width;
+
+
+
+
     final screenHeight = MediaQuery.of(context).size.height;
     return WillPopScope(
       onWillPop: () async {
@@ -73,7 +77,7 @@ class _PasswordState extends State<Password> {
                     '${widget.password}',
                     style: TextStyle(
                       color: Colors.black,
-                      fontSize: 15,
+                      fontSize: 30,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
