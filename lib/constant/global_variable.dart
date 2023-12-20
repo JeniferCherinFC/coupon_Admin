@@ -1,1 +1,1 @@
-String baseUrl = "http://192.168.1.6/cupon_app/public/index.php/api" ;
+String baseUrl = "http://192.168.1.13/cupon_app/public/index.php/api" ;

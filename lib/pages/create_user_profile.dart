@@ -6,6 +6,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:ivs_admin/pages/create_user.dart';
 import 'package:ivs_admin/pages/password.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../service/user_creation.dart';
 
 class CreateUserProfile extends StatefulWidget {
   const CreateUserProfile({Key? key}) : super(key: key);
@@ -16,6 +19,9 @@ class CreateUserProfile extends StatefulWidget {
 
 class _CreateUserProfileState extends State<CreateUserProfile> {
   final TextEditingController nameController = TextEditingController();
+  final TextEditingController locationController = TextEditingController();
+
+
   final TextEditingController mobilenumbercontroller = TextEditingController();
   final TextEditingController emailcontroller = TextEditingController();
   final TextEditingController addresscontroller = TextEditingController();
@@ -34,18 +40,36 @@ class _CreateUserProfileState extends State<CreateUserProfile> {
   bool checkbox2 = false;
   bool checkbox3 = false;
 
+late int check1 ;
+  late int check2 ;
+  late int check3 ;
+
+  int Checkeddata() {
+    if (checkbox1 == true) {
+      return  check1 =1;
+    }
+    if (checkbox2 == true){
+      return check2 =1;
+    }
+    if (checkbox3 == true){
+      return  check3 =1;
+    }
+    return 0;
+  }
 ////////////////////////////////////////////////////////////////////////////////
 
-  String selectedCustomerbranch = 'chennai';
-  String selectedPaymentMode = 'Credit Card';
-  String selectedCustomercountry = 'india';
-  String selectedCity = 'Mumbai';
-  String selectedState = 'Maharashtra';
+  String selectedCustomerbranch = 'OMR';
+  String selectedPaymentMode = 'Cash';
+  String selectedCustomercountry = 'India';
+  String selectedCity = 'Chennai';
+  String selectedState = 'TamilNadu';
 
 ////////////////////////////////////////////////////////////////////////////////
   DateTime? _selectedDate;
 
   Future<void> _selectFromDate() async {
+
+
     DateTime now = DateTime.now();
     DateTime firstDate = DateTime(now.year, now.month, now.day);
     DateTime lastDate = firstDate.add(const Duration(days: 30 * 3));
@@ -60,13 +84,16 @@ class _CreateUserProfileState extends State<CreateUserProfile> {
     if (picked != null && picked != _selectedDate) {
       setState(() {
         _selectedDate = picked;
-        String formattedDate = DateFormat('dd-MM-yyyy').format(picked);
+        String formattedDate = DateFormat('yyyy-MM-dd').format(picked);
         _startDateController.text = formattedDate;
       });
     }
   }
 
   Future<void> _selectToDate() async {
+
+
+
     DateTime now = DateTime.now();
     DateTime firstDate = DateTime(now.year, now.month, now.day);
     DateTime lastDate =
@@ -82,13 +109,55 @@ class _CreateUserProfileState extends State<CreateUserProfile> {
     if (picked != null && picked != _selectedDate) {
       setState(() {
         _selectedDate = picked;
-        String formattedDate = DateFormat('dd-MM-yyyy').format(picked);
+        String formattedDate = DateFormat('yyyy-MM-dd').format(picked);
         _toDateController.text = formattedDate;
       });
     }
   }
 
 ////////////////////////////////////////////////////////////////////////////////
+
+String? cname;
+  UserCreateAd createUser = UserCreateAd();
+
+  uSercreation() async {
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    cname = prefs.getString("name");
+
+
+    createUser.createuser(
+      mobileNumber: mobilenumbercontroller.text,
+      name:nameController.text,
+      email:emailcontroller.text,
+      branch:selectedCustomerbranch,
+      location:locationController.text,
+      address:addresscontroller.text,
+      city:selectedCity,
+      state:selectedState,
+      pincode:pincodecontroller.text,
+      country:selectedCustomercountry,
+      sDate:_startDateController.text,
+      eDate:_toDateController.text,
+      paymentMode:selectedPaymentMode,
+      amountPaid:totalamountcontroller.text,
+      createdBy:cname,
+      isBreakfast:Checkeddata(),
+      isDinner:Checkeddata(),
+      isLunch:Checkeddata(),
+      context: context,
+    );
+  }
+
+
+
+  void initState() {
+    Checkeddata();
+    super.initState();
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
       final screenWidth = MediaQuery.of(context).size.width;
@@ -315,9 +384,9 @@ class _CreateUserProfileState extends State<CreateUserProfile> {
                                 1), // Change the color of the dropdown icon
                           ),
                           items: [
-                            'chennai',
-                            'kovai',
-                            'trichy',
+                            'OMR',
+                            'VSI Estate',
+                            // 'Kancheepuram',
                           ].map<DropdownMenuItem<String>>((String value) {
                             return DropdownMenuItem<String>(
                               value: value,
@@ -423,9 +492,9 @@ class _CreateUserProfileState extends State<CreateUserProfile> {
                                         1), // Change the color of the dropdown icon
                                   ),
                                   items: [
-                                    'Mumbai',
-                                    'Delhi',
-                                    'Bangalore',
+                                    'Chennai',
+                                    'Thiruvallur',
+                                    'Kancheepuram',
                                   ].map<DropdownMenuItem<String>>(
                                       (String value) {
                                     return DropdownMenuItem<String>(
@@ -493,9 +562,9 @@ class _CreateUserProfileState extends State<CreateUserProfile> {
                                         1), // Change the color of the dropdown icon
                                   ),
                                   items: [
-                                    'Maharashtra',
-                                    'Delhi',
-                                    'Karnataka',
+                                    'TamilNadu',
+
+                                    // 'Karnataka',
                                   ].map<DropdownMenuItem<String>>(
                                       (String value) {
                                     return DropdownMenuItem<String>(
@@ -562,9 +631,9 @@ class _CreateUserProfileState extends State<CreateUserProfile> {
                                 1), // Change the color of the dropdown icon
                           ),
                           items: [
-                            'india',
-                            'pakistan',
-                            'Russia',
+                            'India',
+                            // 'pakistan',
+                            // 'Russia',
                           ].map<DropdownMenuItem<String>>((String value) {
                             return DropdownMenuItem<String>(
                               value: value,
@@ -579,13 +648,56 @@ class _CreateUserProfileState extends State<CreateUserProfile> {
                           }).toList(),
                         ),
                         const SizedBox(height: 25),
+
+                        TextFormField(
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          controller: locationController,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'This field is required';
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(
+                            hintText: 'Enter your location',
+                            hintStyle: GoogleFonts.commissioner(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w500,
+                              color: const Color.fromRGBO(43, 135, 97, 0.94),
+                            ),
+                            contentPadding: const EdgeInsets.symmetric(
+                              vertical: 5.0,
+                              horizontal: 15.0,
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: const BorderSide(
+                                color: Color.fromRGBO(43, 135, 97, 1),
+                                width: 1.5,
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: const BorderSide(
+                                color: Color.fromRGBO(43, 135, 97, 1),
+                                width: 1,
+                              ),
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                          ),
+                        ),
+
+
+                        const SizedBox(height: 25),
                         TextFormField(
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                           controller: pincodecontroller,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'This field is required';
-                            } else if (value.length < 10) {
+                            } else if (value.length < 6) {
                               return 'Please enter a 6-digit pin code';
                             }
                             return null;
@@ -904,8 +1016,8 @@ class _CreateUserProfileState extends State<CreateUserProfile> {
                                 1), // Change the color of the dropdown icon
                           ),
                           items: [
-                            'Credit Card',
-                            'Debit Card',
+                            'Cash',
+                            // 'Debit Card',
                             'Online Banking',
                           ].map<DropdownMenuItem<String>>((String value) {
                             return DropdownMenuItem<String>(
@@ -982,11 +1094,13 @@ class _CreateUserProfileState extends State<CreateUserProfile> {
                       backgroundColor: const Color.fromRGBO(43, 135, 97, 1),
                     ),
                     onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const Password(),
-                        ),
-                      );
+
+                      uSercreation();
+                      // Navigator.of(context).push(
+                      //   MaterialPageRoute(
+                      //     builder: (context) => const Password(),
+                      //   ),
+                      // );
                     },
                     child: Text(
                       'Submit',

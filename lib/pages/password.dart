@@ -6,7 +6,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:ivs_admin/pages/create_user.dart';
 
 class Password extends StatefulWidget {
-  const Password({Key? key}) : super(key: key);
+  final String ? password;
+  const Password({Key? key, required this.password}) : super(key: key);
 
   @override
   State<Password> createState() => _PasswordState();
@@ -41,7 +42,7 @@ class _PasswordState extends State<Password> {
                     text: TextSpan(
                       children: <TextSpan>[
                         TextSpan(
-                          text: 'Congratulations your ',
+                          text: 'Congratulations  ',
                           style: GoogleFonts.montserrat(
                             color: const Color.fromRGBO(0, 0, 0, 1),
                             fontSize: 15,
@@ -49,9 +50,17 @@ class _PasswordState extends State<Password> {
                           ),
                         ),
                         TextSpan(
-                          text: 'Password',
+                          text: 'Password ',
                           style: GoogleFonts.montserrat(
                             color: const Color.fromRGBO(43, 135, 97, 1),
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        TextSpan(
+                          text: 'for this  customer',
+                          style: GoogleFonts.montserrat(
+                            color: const Color.fromRGBO(0, 0, 0, 1),
                             fontSize: 15,
                             fontWeight: FontWeight.w600,
                           ),
@@ -60,8 +69,8 @@ class _PasswordState extends State<Password> {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  const Text(
-                    '**********************************',
+                   Text(
+                    '${widget.password}',
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 15,
